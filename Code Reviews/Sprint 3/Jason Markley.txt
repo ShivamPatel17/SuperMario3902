@@ -1,0 +1,51 @@
+﻿Author: Jason
+Date: 3/24
+Sprint: 3
+Name of File: Star.cs, update method
+Author of file: Nam Nguyen
+Comments:
+Could use the base.Update as it will add the velocity to the object, just have on the ground to true so that gravity isn't applied
+The Anchor needs to change values for some reason, an anchor that moves is a strange anchor.
+FromBlock is set to false, yet the object was still from a block. Maybe worth states for the items to make it easier to tell what is happening.
+
+Time: 15 min
+Changes: I would give the items a state, this should make this method easier to read and FromBlock wouldn't be needed and instead would just have a reveal state and then transition into the normal movement.
+public override void Update(GameTime gameTime)
+        {
+            if (Collidable)
+            {
+                base.Update(gameTime);
+            }
+            changedDir = false;
+
+            if (FromBlock)
+            {
+                Vector2 nextPosition = Position;
+                nextPosition.Y += Velocity.Y;
+                Position = nextPosition;
+                if (Position.Y <= Anchor - MaxHeightChange)
+                {
+                    Velocity = new Vector2(0, 0.25f);
+                    Anchor -= 32;
+                }
+                else if (Position.Y >= Anchor)
+                {
+                    Position = new Vector2((int)Position.X, Anchor);
+                    Collidable = true;
+                    Velocity = new Vector2(0.8f*Direction,0);
+                    FromBlock = false;
+                }
+                else
+                {
+                    Position += Velocity;
+                }
+            }
+            if (Collidable){
+                if (OnGround){
+                   Vector2 vel = Velocity;
+                   vel.Y = -1.5f;//temp number, can be changed later.
+                   Velocity = vel;
+                }
+                Position += Velocity;
+            }
+        }

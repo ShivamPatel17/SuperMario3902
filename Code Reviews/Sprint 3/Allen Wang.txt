@@ -1,0 +1,81 @@
+﻿Author: Allen Wang
+Date: 3/24/2020
+Sprint: 3
+Name of file: CollisionDetection.cs
+Author of file: Jason Markley
+Comments:
+//Is direction property really needed? It's just the x value of the velocity
+//Could create a separate method for collision detection without mario to simplify the if statement in collisiondetection, but not a big deal
+//Pretty much all methods are nice and short
+//Not sure if items like supermushroom are supposed to bounce off enemies or just go through them, this response seems based on bouncing off enemies
+Time: 15 min
+Changes: I would get rid of the direction property and make adjustments accordingly, everything else seems ok
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using TechSupportMario.Collisions;
+using TechSupportMario.Entity.MarioEntity;
+
+namespace TechSupportMario.Entity.Items
+{
+    class AbstractItem : AbstractEntity, IItem
+    {
+        public int Anchor { get; set; }
+        public bool FromBlock{get; set;}
+
+        public int Direction{get; set;}
+        public int MaxHeightChange{get; set;}
+       
+
+        public AbstractItem(Texture2D texture) : base(texture)
+        {
+            SourceRectangle = texture.Bounds;
+            Opacity = 1f;
+        }
+
+        public virtual void  ChangeDirection()
+        {
+            Direction *= -1;
+            Vector2 temp = Velocity;
+            temp.X *= Direction;
+            Velocity = temp;
+        }
+
+        public virtual void BounceFromBlock(Vector2 position)
+        {
+            FromBlock = true;
+            Anchor = (int)position.Y;
+            Position = new Vector2(position.X+2, position.Y - Texture.Height);
+            Velocity = new Vector2(0, -0.25f);
+            Collidable = false;
+            Stage.AddEntity(this);
+        }
+
+        public override void CollisionResponse(IEntity entity, CollisionDetection.Directions direction)
+        {
+            if (entity is Mario)
+            {
+                Collect = true;
+            }
+            else
+            {
+                if (direction == CollisionDetection.Directions.right || direction == CollisionDetection.Directions.left)
+                {
+                    ChangeDirection();
+                }
+                else
+                {
+                    Vector2 vel = Velocity;
+                    vel.Y = 0;
+                    Velocity = vel;
+                }
+            }
+        }
+
+        public override void Update(GameTime gameTime) {
+            base.Update(gameTime);
+        }
+
+
+    }
+}

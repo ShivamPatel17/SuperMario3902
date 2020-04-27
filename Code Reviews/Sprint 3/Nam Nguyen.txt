@@ -1,0 +1,44 @@
+﻿Author: Nam Nguyen
+Date: 3/24/2020
+Sprint: 3
+Minutes: 15
+File name: Function SetOnGround in CollisionDetection.cs 
+Author of File: Jason Markley
+Comment:
+- Probably comment out the Debug line for Enemy
+- There was one problem with this checking that might cause the bug when mario step on the edge of the block.
+- 2 collision box collided but mario technically not on the block.
+Proposing Change:
+- Haven't got any proposing change yet.
+Code:
+ public static void SetOnGround(IEntity entity, QuadTree tree)
+        {
+            ISet<IEntity> possible = tree.Retrieve(entity);
+            if(entity is AbstractEnemy)
+            {
+                System.Diagnostics.Debug.WriteLine("here");
+            }
+            foreach(IEntity checking in possible)
+            {
+                if(checking is IBlock && !(((IBlock)checking).BlockState is BlockStateHidden))
+                {
+                    if((checking.Position.X < entity.Position.X && checking.CollisionBox.Right > entity.Position.X) || (checking.Position.X < entity.CollisionBox.Right && checking.CollisionBox.Right > entity.CollisionBox.Right))
+                    {
+                        if(checking.CollisionBox.Top <= entity.Position.Y && checking.CollisionBox.Bottom > entity.Position.Y)
+                        {
+                            entity.OnGround = true;
+                            return;
+                        }
+                    }
+                    if(checking.Position.X == entity.Position.X && checking.CollisionBox.Right == entity.CollisionBox.Right)
+                    {
+                        if (checking.CollisionBox.Top <= entity.Position.Y && checking.CollisionBox.Bottom > entity.Position.Y)
+                        {
+                            entity.OnGround = true;
+                            return;
+                        }
+                    }
+                }
+            }
+            entity.OnGround = false;
+        }

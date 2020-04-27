@@ -1,0 +1,7 @@
+﻿A2
+0
+LevelLoader/Level_Allen.csv
+B
+0
+.1
+CW

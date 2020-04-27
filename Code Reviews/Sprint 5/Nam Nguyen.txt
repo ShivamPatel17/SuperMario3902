@@ -1,0 +1,79 @@
+﻿Author: Nam Nguyen
+Date: 4/21/2020
+Sprint: 5
+Minutes: 15
+File name:  Entity/Enemy/Boo.cs
+Author of File: Shivam Patel
+Comment:
+- Interesting implementation of Boo
+- The moving /\/\/\ for the Velocity (1,1) with the help of using Math.Clamp and flipping is really good. 
+Code:
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TechSupportMario.Collisions;
+using TechSupportMario.Entity.MarioEntity;
+using TechSupportMario.State.EnemyState;
+
+namespace TechSupportMario.Entity.Enemy
+{
+    public class Boo : AbstractEnemy
+    {
+        int currentYFrame, decay;
+        private double xdiff, ydiff;
+        public Boo(Texture2D texture):base(texture, EntityType.Boo)
+        {
+            Velocity = new Vector2(1, 1);
+            Columns = 2;
+            SourceRectangle = new Rectangle(new Point(0, 0), new Point(32, 32));
+        }
+        public override IEntity Clone()
+        {
+            Boo boo = new Boo(Texture);
+            IEntity clone = boo;
+            base.Clone(ref clone);
+            boo = (Boo)clone;
+            return boo;
+        }
+
+
+        public override void CollisionResponse(IEntity entity, CollisionDetection.Direction direction)
+        {
+            if(entity  is Mario  && ((Mario)entity).PowerStateEnum == Mario.PowerStateType.Star)
+            {
+                Collect = true;
+                NeedsUpdating = false;
+            }
+               
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            xdiff = MathHelper.Clamp((Stage.mario.Position.X - Position.X), -1, 1);
+            ydiff = MathHelper.Clamp((Stage.mario.Position.Y - Position.Y), -.4f, .3f);
+
+            Velocity = new Vector2((float)xdiff, (float)ydiff);
+            if (xdiff < 0)
+            {
+                Flip(0);
+            }
+            else
+            {
+                Flip(1);
+            }
+            Position += Velocity;
+        }
+        public void Flip(int i)
+        {
+            currentYFrame = i;
+            Rectangle source = SourceRectangle;
+            source.Y = currentYFrame * SourceRectangle.Size.Y;
+            SourceRectangle = source;
+        }
+    }
+}

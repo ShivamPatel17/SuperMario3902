@@ -1,0 +1,85 @@
+﻿Author: Jason Markley
+Date:2/24/2020
+cs file: DeadEnemy.cs
+Aurthor: Nam Nguyen
+Comments (also in the body of the code for context):
+//this doesn't set collidable yet calls base, so this entity is collidable. A dead enemy shouldn't be collidable.
+
+//lot of unimplemented methods, Maybe Inherit a higher level class like abstract entity or maybe make this just a sprite
+
+//this base draw should be in abstract entity already, not sure why it is repeated here
+
+//AbstractEntity defines a constant frame rate call Frame, don't know why we would use another rate here.
+//also using a different way to decide when to change frames from the rest of the project, using total milliseconds instead
+//of a running total since the last change.
+
+//no need to make a new sourceRectangle
+//why change the position? use the opacity and collision booleans would be better to get rid of this
+//shouldn't need to change the position, plus it makes it harder to remove the item.
+Time: 15 minutes
+Change: Overall this class seems more like a base sprite rather than an Enemy. Would probably be better to change it to implement 
+ISprite. It doesn't use velocity, flip, SetSourcePosition, or SetPosition. Those methods also could throw an exception ending the game
+all because of a dead enemy. So I would change this to be a sprite instead of an abstract entity, use the opacity to set when it should dissapear
+
+
+namespace TechSupportMario.Entity.Enemy
+{
+    public class DeadEnemy : AbstractEnemy
+    {
+        private int currentFrame;
+        private double time = 0;
+        private const double frameRate = 100;
+
+        //this doesn't set collidable yet calls base, so this entity is collidable. A dead enemy shouldn't be collidable.
+        public DeadEnemy(Texture2D texture, Vector2 position) : base(texture)
+        {
+            Position = position;
+            currentFrame = 0;
+            Columns = 5;
+        }
+        //lot of unimplemented methods, Maybe Inherit a higher level class like abstract entity or maybe make this just a sprite
+
+        public override void SetPosition(Vector2 position)
+        {
+            throw new NotImplementedException();
+        }
+        public override void SetSourcePosition(Point p)
+        {
+            throw new NotImplementedException();
+        }
+        public override void Flip()
+        {
+            throw new NotImplementedException();
+        }
+
+        //this base draw should be in abstract entity already, not sure why it is repeated here
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Texture, Position, SourceRectangle, Color.White);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //AbstractEntity defines a constant frame rate call Frame, don't know why we would use another rate here.
+            //also using a different way to decide when to change frames from the rest of the project, using total milliseconds instead
+            //of a running total since the last change. 
+            if (gameTime.TotalGameTime.TotalMilliseconds - time > frameRate)
+            {
+                time = gameTime.TotalGameTime.TotalMilliseconds;
+                if (currentFrame < 5)
+                {
+                    SourceRectangle = new Rectangle(Texture.Width / Columns * currentFrame, 0, Texture.Width / Columns, Texture.Height);
+                    currentFrame++;
+                }
+                else
+                {
+                    SourceRectangle = new Rectangle();//no need to make a new sourceRectangle
+                    Position = new Vector2();//why change the position? use the opacity and collision booleans would be better to get rid of this
+                    //shouldn't need to change the position, plus it makes it harder to remove the item.
+                    Collect = true;
+                }
+
+            }
+        }
+    }
+}

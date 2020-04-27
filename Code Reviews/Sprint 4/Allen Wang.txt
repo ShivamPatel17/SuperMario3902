@@ -1,0 +1,63 @@
+﻿Author: Allen Wang
+Date: 4/7/2020
+Sprint: 4
+Name of file: Hud.cs
+Author of file: Shivam Patel
+Comments:
+//properties should all be capitalized
+//vector positions are better held in private variables
+//variables a bit ambiguous, like coin and xCoin; mush and xLives
+Time: 7 min
+Changes: get rid of x in front of xCoins and xLives, coins sprite named as CoinSprite or something
+Create private vectors with variables like _coinPosition
+rename variables, sprites should have Sprite appended, numbers are ok
+
+using Microsoft.Xna.Framework;
+using TechSupportMario.CameraItems;
+using TechSupportMario.Entity.Items;
+
+namespace TechSupportMario.Entity.HeadsUpDisplay
+{
+    public class Hud : Layer
+    {
+        public Timer Clock { get; set; }
+        public Score GameScore { get; set; }
+        public Text LevelText { get; set; }
+        
+        public Text xCoins { get; set; }
+        public Text xLives { get; set; }
+        public ISprite coins { get; set; }
+
+        public Hud(Camera camera, Timer t, Score s, Text lt) : base(camera)
+        {
+            Sprites.Add(s);
+            Sprites.Add(t);
+            Sprites.Add(lt);
+            CoinSprite coin = ItemFactory.Instance.CoinSprite();
+            SmallOneUp mush = ItemFactory.Instance.SmallOneUp();
+
+            xCoins = HudFactory.Instance.Text("");
+            xLives = HudFactory.Instance.Text("");
+
+            coin.Position = new Vector2(90, 38);
+            xCoins.Position = new Vector2(115, 10);
+            mush.Position = new Vector2(358, 27);
+            xLives.Position = new Vector2(380, 10);
+
+            Sprites.Add(coin);
+            Sprites.Add(mush);
+            Sprites.Add(xCoins);
+            Sprites.Add(xLives);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            xLives.SetText("X" + Stage.player.Lives);
+            xCoins.SetText("X" + Stage.player.Coins);
+            foreach (ISprite sprite in Sprites)
+            {
+                sprite.Update(gameTime);
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_coin.wav</SourceFile>
+  <SourceTime>2020-04-03T20:49:16.5153026-04:00</SourceTime>
+  <DestFile>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/bin/Windows/sound/Effect/smb_coin.xnb</DestFile>
+  <DestTime>2020-04-04T02:48:02.478645-04:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2018-12-08T11:35:54-05:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2018-12-08T11:35:54-05:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

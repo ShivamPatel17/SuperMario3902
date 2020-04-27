@@ -1,0 +1,155 @@
+﻿Author: Allen Wang
+Date: 2/11/2020
+Sprint: 1
+Name of file: MarioActionStateMovingLeft.cs
+Author of file: Jason Markley
+Comments:
+//Since the private variables of the class share the same values as the MarioActionStateMovingRight class, I would
+//move the variables to the abstract class, or a superclass as a protected variable.
+//The section of code commented with "//extract code here" is also duplicated in MarioActionStateMovingRight, and can be moved to the abstract class, or a superclass as a method.
+//The methods Enter(), ActionUp(), ActionDown(), and Leave() are duplicated in MarioActionStateMovingRight, and can be moved to the abstract class, or a superclass.
+//In FixSource, you can move the sourceRectangle[] changes to different methods, like FixSourceNormal()
+Time: 30 minutes
+Change:  I would move the data in the constructor of MarioActionStateMovingLeft (and MovingRight) to Enter() which would keep the flow of the State pattern, as well
+as let the duplicated code in the constructors be extracted to one class above.
+
+
+
+using Microsoft.Xna.Framework;
+using TechSupportMario.Entity.MarioEntity;
+
+namespace TechSupportMario.State.MarioStates
+{
+    class MarioActionStateMovingLeft : AbstractMarioMoving
+    {
+
+        //idle state dim and positions
+        private const int HeightNormal = 40;
+        private const int WidthNormal = 28;
+        private const int HeightSuper = 56;
+        private const int WidthSuper = 30;
+        //second state dim and positions
+        private const int WidthSuperPos2 = 31;
+        //third state dim and positions
+        private const int WidthSuperPos3 = 33;
+        //for animation
+        //this is which direction to move the source rectangle, either 1 (moving right) or -1 (moving left)
+        private int direction;
+        private Rectangle[] sourceRectangles;
+        private const int frames = 3;
+        private int frame;
+        private int oldY;
+
+        public MarioActionStateMovingLeft(IMario context): base(context)
+        {
+            direction = 1;
+            sourceRectangles = new Rectangle[frames];
+            frame = 0;
+            oldY = context.SourceRectangle.Y;
+        }
+
+        public override void Enter()
+        {
+            FixSource();
+            Context.SourceRectangle = sourceRectangles[0];
+        }
+
+        public override void ActionUp()
+        {
+            AbstractMarioActionState nextState = new MarioActionStateJump(Context);
+            Context.ActionState = nextState;
+            Leave();
+        }
+
+        public override void ActionDown()
+        {
+            AbstractMarioActionState nextState = new MarioActionStateCrouch(Context);
+            Context.ActionState = nextState;
+            Leave();
+        }
+
+        public override void ActionRight()
+        {
+
+            AbstractMarioActionState nextState = new MarioActionStateIdle(Context);
+            Context.ActionState = nextState;
+            Leave();
+
+        }
+
+        public override void Leave()
+        {
+            Context.ActionState.Enter();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if(oldY != Context.SourceRectangle.Y)
+            {
+                FixSource();
+                oldY = Context.SourceRectangle.Y;
+            }
+            if (lastChange >= FrameChange)
+            {
+                //changing frames
+                Rectangle source;
+                //extract code here
+                if (direction == 1)
+                {
+                    frame++;
+                    if (frame == frames)
+                    {
+                        frame = frames - 2;
+                        direction = -1;
+                    }
+                }
+                else
+                {
+                    frame--;
+                    if (frame < 0)
+                    {
+                        frame = 1;
+                        direction = 1;
+                    }
+                }
+                //end of extraction
+                source = sourceRectangles[frame];
+                if (source.Y != Context.SourceRectangle.Y)
+                {
+                    FixSource();
+                }
+                Context.SourceRectangle = source;
+                lastChange = 0;
+            }
+            else
+            {
+                lastChange += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            }
+            base.Update(gameTime);
+        }
+
+        public override void FixSource()
+        {
+            if (Context.SourceRectangle.Y == 0)
+            {
+                sourceRectangles[0] = new Rectangle(new Point(0, 0), new Point(WidthNormal, HeightNormal));
+                sourceRectangles[1] = new Rectangle(new Point(WidthNormal, 0), new Point(WidthNormal, HeightNormal));
+                sourceRectangles[2] = new Rectangle(new Point(WidthNormal + WidthNormal, 0), new Point(WidthNormal, HeightNormal));
+            }
+            else if (Context.SourceRectangle.Y == SuperMarioStart)
+            {
+                sourceRectangles[0] = new Rectangle(new Point(0, SuperMarioStart), new Point(WidthSuper, HeightSuper));
+                sourceRectangles[1] = new Rectangle(new Point(WidthSuper, SuperMarioStart), new Point(WidthSuperPos2, HeightSuper));
+                sourceRectangles[2] = new Rectangle(new Point(WidthSuper + WidthSuperPos2, SuperMarioStart), new Point(WidthSuperPos3, HeightSuper));
+            }
+            else
+            {
+                sourceRectangles[0] = new Rectangle(new Point(0, FireMarioStart), new Point(WidthSuper, HeightSuper));
+                sourceRectangles[1] = new Rectangle(new Point(WidthSuper, FireMarioStart), new Point(WidthSuperPos2, HeightSuper));
+                sourceRectangles[2] = new Rectangle(new Point(WidthSuper + WidthSuperPos2, FireMarioStart), new Point(WidthSuperPos3, HeightSuper));
+            }
+            Context.SourceRectangle = sourceRectangles[frame];
+        }
+    }
+}

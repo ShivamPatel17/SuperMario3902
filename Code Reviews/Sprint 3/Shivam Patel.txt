@@ -1,0 +1,82 @@
+﻿Author: Shivam Patel
+Date: 3/24
+Sprint: 3
+Name of File: ControllerMaker.cs
+Author of file: Jason Markley
+Comments: 
+- This class is not utilized very well
+- the InitializeControllersForGamePlay only gets called one
+- additionally, this is problamatic because there is no way to use a different 
+   keyboard mapping 
+
+Time: 14 minutes
+Changes
+- there could be a new data structure/class for the different keyboard bindindgs
+- there should be an option to actually edit the bindings if desired
+- change the initialize controller so that that it accepts the new bindings as a paramter
+and just updates all of the keys/buttons
+
+
+
+
+
+using Microsoft.Xna.Framework.Input;
+using TechSupportMario.Commands;
+
+namespace TechSupportMario.Controller
+{
+    static class ControllerMaker
+    {
+
+        public static void InitializeControllersForGameplay(Game1 game, KeyboardController keyboard, GamepadController gamepad)
+        {
+            //Add the Reset command to the r
+            ICommand resetcommand = new ResetCommand(game.GameCamera);
+            keyboard.Add((int)Keys.R, resetcommand);
+            gamepad.Add((int)Buttons.Back, resetcommand);
+            //Add the Exit Command to the controllers
+            ICommand exitcommand = new ExitCommand(game);
+            keyboard.Add((int)Keys.Q, exitcommand);
+            gamepad.Add((int)Buttons.Start, exitcommand);
+            //add the left command
+            ICommand leftcommand = new LeftCommand(Stage.mario);
+            keyboard.Add((int)Keys.A, leftcommand);
+            keyboard.Add((int)Keys.Left, leftcommand);
+            gamepad.Add((int)Buttons.DPadLeft, leftcommand);
+            //add the right commmand
+            ICommand rightcommand = new RightCommand(Stage.mario);
+            keyboard.Add((int)Keys.D, rightcommand);
+            keyboard.Add((int)Keys.Right, rightcommand);
+            gamepad.Add((int)Buttons.DPadRight, rightcommand);
+            //add the down command
+            ICommand downcommand = new DownCommand(Stage.mario);
+            keyboard.Add((int)Keys.S, downcommand);
+            keyboard.Add((int)Keys.Down, downcommand);
+            gamepad.Add((int)Buttons.DPadDown, downcommand);
+            //add the up command
+            ICommand upcommand = new UpCommand(Stage.mario);
+            keyboard.Add((int)Keys.W, upcommand);
+            keyboard.Add((int)Keys.Up, upcommand);
+            gamepad.Add((int)Buttons.DPadUp, upcommand);
+            //add fireflower command
+            ICommand firecommand = new FireMarioCommand(Stage.mario);
+            keyboard.Add((int)Keys.I, firecommand);
+            //add super command
+            ICommand supercommand = new SuperCommand(Stage.mario);
+            keyboard.Add((int)Keys.U, supercommand);
+            //add normal mario command
+            ICommand normalcommand = new NormalCommand(Stage.mario);
+            keyboard.Add((int)Keys.Y, normalcommand);
+            //add take damage command
+            ICommand damagecommand = new DamageCommand(Stage.mario);
+            keyboard.Add((int)Keys.O, damagecommand);
+            //add star power command
+            ICommand starcommand = new StarCommand(Stage.mario);
+            keyboard.Add((int)Keys.P, starcommand);
+            //add the fireball command with space
+            ICommand fireballcommand = new MakeFireBall(Stage.mario);
+            keyboard.Add((int)Keys.Space, fireballcommand);
+        }
+    }
+}
+

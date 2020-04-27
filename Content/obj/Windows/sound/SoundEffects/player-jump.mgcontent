@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/SoundEffects/player-jump.ogg</SourceFile>
+  <SourceTime>2020-04-03T20:49:16.5383851-04:00</SourceTime>
+  <DestFile>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/bin/Windows/sound/SoundEffects/player-jump.xnb</DestFile>
+  <DestTime>2020-04-04T02:48:13.792582-04:00</DestTime>
+  <Importer>OggImporter</Importer>
+  <ImporterTime>2018-12-08T11:35:54-05:00</ImporterTime>
+  <Processor>SongProcessor</Processor>
+  <ProcessorTime>2018-12-08T11:35:54-05:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput>
+    <string>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/bin/Windows/sound/SoundEffects/player-jump.wma</string>
+  </BuildOutput>
+</PipelineBuildEvent>

@@ -1,0 +1,91 @@
+﻿Author: Shivam Patel
+Date: 2/11/2020
+Sprint: 1
+Minutes: 20
+File name: Coin.cs
+Author of Coin.cs: Shivam Patel
+Comment:
+-In the folder Items, many classes implement IEntity interface but there are no abstract classes. All of them repeat the initialization method
+for IEntity values, which wasn't really clean. 
+-Plus, probably make an IItem classes so we maybe use that in the future.
+-Potential use array or List to store Rectangle value. Save more memory space since the only thing we need to update will only be the integer.
+Changes: 
+-Make an abstract class of item to avoid repetitive code, cleaner code.
+-Use different data structure for rectangle iteration. Suggeting List<Int,Rectangle>, and use int frameNumber to Update SourceRectangle.
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TechSupportMario.Entity.Items
+{
+    class Coin : IEntity
+    {
+        private Texture2D texture;
+        private int width, height;
+        private Stack<Rectangle> sourceRectangles1;
+        private Stack<Rectangle> sourceRectangles2;
+        private double previousTime = 0;
+        private double frameRate = 80;
+
+       
+        public Coin(Texture2D Texture)
+        {
+            texture = Texture;
+            width = texture.Width;
+            height = texture.Height;
+            Rows = 1;
+            Columns = 4;
+            createRectangles();
+
+        }
+        private void createRectangles()
+        {
+            sourceRectangles1 = new Stack<Rectangle>();
+            sourceRectangles2 = new Stack<Rectangle>();
+            for(int i = 0; i < Columns; i++)
+            {
+                Rectangle temp = new Rectangle(i * (width / Columns), 0, width / Columns, height / Rows);
+                sourceRectangles1.Push(temp);
+            }
+            changeSource();
+        }
+        public Rectangle SourceRectangle { get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public float Opacity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Rows { get; set; }
+        public int Columns { get; set; }
+        public Texture2D Texture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, Position, SourceRectangle, Color.White); 
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds - previousTime> frameRate)
+            {
+                changeSource();
+                previousTime = gameTime.TotalGameTime.TotalMilliseconds; 
+            }
+            
+        }
+        private void changeSource()
+        {
+            SourceRectangle = sourceRectangles1.Peek();
+            sourceRectangles2.Push(sourceRectangles1.Pop());
+            if(sourceRectangles1.Count == 0)
+            {
+                sourceRectangles1 = sourceRectangles2;
+                sourceRectangles2 = new Stack<Rectangle>();
+            }
+        }
+    }
+}

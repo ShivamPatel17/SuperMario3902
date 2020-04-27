@@ -1,0 +1,71 @@
+﻿Author: Jason
+Date: 4/21
+Sprint: 5
+Name of File: Boo.cs
+Author of file: Shivam
+Comments:
+For the velocity could use Vector.One. xdiff and ydiff are only used in update and are changed every update so they don't need to be declared and kept throughout the lifetime of the object.
+Could use enemy moving right and enemy moving left state to handle the changing for you (flip). Would need to redo the velocity for them though.
+time: 7 minutes
+Change:
+Big change is using an enemy state to keep them consistent with how the other enemies behave, as I don't know what would happen if an outside entity was expect to call a method that the state defines.
+
+
+namespace TechSupportMario.Entity.Enemy
+{
+    public class Boo : AbstractEnemy
+    {
+        int currentYFrame;
+        private double xdiff, ydiff;
+        public Boo(Texture2D texture):base(texture, EntityType.Boo)
+        {
+            Velocity = new Vector2(1, 1);
+            Columns = 2;
+            SourceRectangle = new Rectangle(new Point(0, 0), new Point(32, 32));
+        }
+        public override IEntity Clone()
+        {
+            Boo boo = new Boo(Texture);
+            IEntity clone = boo;
+            base.Clone(ref clone);
+            boo = (Boo)clone;
+            return boo;
+        }
+
+
+        public override void CollisionResponse(IEntity entity, CollisionDetection.Direction direction)
+        {
+            if(entity  is Mario  && ((Mario)entity).PowerStateEnum == Mario.PowerStateType.Star)
+            {
+                Collect = true;
+                NeedsUpdating = false;
+            }
+               
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            xdiff = MathHelper.Clamp((Stage.mario.Position.X - Position.X), -1, 1);
+            ydiff = MathHelper.Clamp((Stage.mario.Position.Y - Position.Y), -.4f, .3f);
+
+            Velocity = new Vector2((float)xdiff, (float)ydiff);
+            if (xdiff < 0)
+            {
+                Flip(0);
+            }
+            else
+            {
+                Flip(1);
+            }
+            Position += Velocity;
+        }
+        public void Flip(int i)
+        {
+            currentYFrame = i;
+            Rectangle source = SourceRectangle;
+            source.Y = currentYFrame * SourceRectangle.Size.Y;
+            SourceRectangle = source;
+        }
+    }
+}
+

@@ -1,0 +1,256 @@
+﻿Author: Shivam Patel
+Date: 2/25/2020
+Sprint: 2
+Name of file: Game1.cd
+Author of file: Jason Markley (for the purpose of this code review/sprint)
+Comments: these comments are for primarily for code starting from line 122 and beyond, concerning the draw
+- there appears to be a lot of cyclic complexity
+- the following methods call methods from within, which is good:
+    - DrawRectangle
+    - DrawQuadTreeBounds
+    - DrawLine
+
+- however, the drawline has 4 switch cases and within that, for loops.
+- this code is somewhat difficult to understand since it's cluttered together at the bottom of this
+- long file 
+
+Time: 13 minutes
+Changes: I think a good way to clean this up, since the drawing that i commented about it is primarly 
+just drawing lines, should be placed into a new class. 
+
+This would clean up the Game1.cs class, which should be relativley small and easy to follow
+
+Then, the regular Draw() method can move all the DrawRectangle calls into another class as well as the methods 
+DrawRectangles depends on.
+
+
+
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using TechSupportMario.Collisions;
+using TechSupportMario.Entity;
+using TechSupportMario.Entity.Block;
+using TechSupportMario.Entity.Enemy;
+using TechSupportMario.Entity.MarioEntity;
+
+namespace TechSupportMario
+{
+    /// <summary>
+    /// </summary>
+    public class Game1 : Game
+    {
+        //getting rid of graphics causes the game to not be able to run.
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        Texture2D[] colors;
+        public Game1()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 700;
+            graphics.ApplyChanges();
+        }
+
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize()
+        {
+            Stage.Initialize(this);
+            //Stage.SprintOneInitialize();
+            base.Initialize();
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            colors = new Texture2D[5];
+            colors[0] = Content.Load<Texture2D>("Colors/green");
+            colors[1] = Content.Load<Texture2D>("Colors/yellow");
+            colors[2] = Content.Load<Texture2D>("Colors/red");
+            colors[3] = Content.Load<Texture2D>("Colors/blue");
+            colors[4] = Content.Load<Texture2D>("Colors/white");
+
+            // TODO: use this.Content to load your game content here
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// game-specific content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            foreach (IController controller in Stage.controllers)
+            {
+                controller.Update();
+            }
+
+            Stage.CollideController.CollisionsCheckAndFix(Stage.GameQuadTree.MovingCollidableEntities(Stage.DrawRectangle), Stage.GameQuadTree);
+            CollisionDetection.CheckAndFixMarioOutOfBounds(Stage.mario, Stage.DrawRectangle);
+            //list to separate the two types of sprites that need to be updated
+            //need to do this in two steps to make sure they don't call update on an entity that was moving but then stop due to a collision
+            ISet<IEntity> moving = Stage.GameQuadTree.MovingEntities(Stage.DrawRectangle);
+            ISet<ISprite> animated = Stage.GameQuadTree.SpritesNeedingUpdated(Stage.DrawRectangle);
+            //to remove enemies and eventually items from the game
+            ISet<ISprite> remove = new HashSet<ISprite>();
+            foreach (IEntity sprite in moving)
+            {
+                Point location = new Point(sprite.CollisionBox.X - (int)sprite.Velocity.X, sprite.CollisionBox.Y - (int)sprite.Velocity.Y);
+                Point size = new Point(sprite.CollisionBox.Width + (int)sprite.Velocity.X, sprite.CollisionBox.Height + (int)sprite.Velocity.Y);
+                Rectangle checkRegion = new Rectangle(location, size);//incase it somehow moved out of a square before removing itself.
+                Stage.GameQuadTree.Remove(sprite, checkRegion);
+                sprite.Update(gameTime);
+                Stage.GameQuadTree.Insert(sprite);
+            }
+            foreach (ISprite sprite in animated)
+            {
+                sprite.Update(gameTime);
+                if (sprite is IEntity)//remove dead enemies and later collected items
+                {
+                    if (((IEntity)sprite).Collect)
+                    {
+                        remove.Add(sprite);
+                    }
+                    
+                }
+            }
+            //remove the sprites that are no longer part of the game
+            if (remove.Count > 0)
+            {
+                Stage.GameQuadTree.Remove(remove);
+            }
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            foreach (ISprite sprite in Stage.GameQuadTree.TrueSprites(Stage.DrawRectangle))//"background" sprites
+            {
+                sprite.Draw(spriteBatch);
+            }
+            spriteBatch.End();
+            spriteBatch.Begin();
+            foreach (IEntity sprite in Stage.GameQuadTree.TrueEntities(Stage.DrawRectangle))//"foreground" entities
+            {
+                sprite.Draw(spriteBatch);
+                if (Stage.showCollisionBox)//press C in game to toggle this
+                {
+                    if (sprite.Collidable)
+                    {
+                        if (sprite is Mario)
+                            DrawRectangle(sprite.CollisionBox, colors[1]);
+                        else if (sprite is AbstractBlock)
+                            DrawRectangle(sprite.CollisionBox, colors[3]);
+                        else if (sprite is AbstractEnemy)
+                            DrawRectangle(sprite.CollisionBox, colors[2]);
+                        else
+                            DrawRectangle(sprite.CollisionBox, colors[0]);
+                    }
+                }
+            }
+
+            if (Stage.showQuadTree)//press Z during the game to toggle this
+            {
+                DrawQuadTreeBounds(Stage.GameQuadTree);
+            }
+
+            spriteBatch.End();
+            base.Draw(gameTime);
+        }
+
+        private void DrawQuadTreeBounds(QuadTree tree)
+        {
+            Texture2D color = colors[tree.Level];
+            DrawRectangle(tree.Bounds, color);
+            for (int i = 0; i < 4; i++)
+            {
+                if (tree.GetNodes()[0] != null)
+                {
+                    DrawQuadTreeBounds(tree.GetNodes()[i]);
+                }
+            }
+        }
+
+
+        private void DrawRectangle(Rectangle rect, Texture2D color)
+        {
+
+            Vector2 position = new Vector2(rect.Location.X, rect.Location.Y);
+
+            DrawLine(color, position, rect.Height, 0);
+            DrawLine(color, new Vector2(position.X + rect.Width, position.Y), rect.Height, 0);
+            DrawLine(color, position, rect.Width, 3);
+            DrawLine(color, new Vector2(position.X, position.Y + rect.Height), rect.Width, 3);
+        }
+
+        ///<summary>
+        /// 0 is down, 1 is up, 2 is left, 3 is right;
+        ///</summary>
+        private void DrawLine(Texture2D color, Vector2 start, int length, int dir)
+        {
+            switch (dir)
+            {
+                case 0:
+                    for (int i = 0; i < length; i++)
+                    {
+                        spriteBatch.Draw(color, start, Color.White);
+                        start.Y++;
+                    }
+                    start.Y -= length;
+                    break;
+                case 1:
+                    for (int i = 0; i < length; i++)
+                    {
+                        spriteBatch.Draw(color, start, Color.White);
+                        start.Y--;
+                    }
+                    start.Y += length;
+                    break;
+                case 2:
+                    for (int i = 0; i < length; i++)
+                    {
+                        spriteBatch.Draw(color, start, Color.White);
+                        start.X--;
+                    }
+                    start.X += length;
+                    break;
+                case 3:
+                    for (int i = 0; i < length; i++)
+                    {
+                        spriteBatch.Draw(color, start, Color.White);
+                        start.X++;
+                    }
+                    start.X -= length;
+                    break;
+            }
+        }
+    }
+
+}

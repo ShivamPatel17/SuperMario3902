@@ -1,0 +1,105 @@
+﻿Author: Jason Markley
+Date:2/11/2020
+cs file: Goomba.cs
+Aurthor: Allen Wang
+Comments (also in the body of the code for context):
+//Jason-Position should really be set to 0,0 and have another class tell it where to start or have it part of the constructor.
+//Jason-Could always just set lastFrameTime to 0, the extra part is only a few milliseconds and really we don't want that as 
+//it could cause the sprite to update at different intervals
+//than they would normally over time, though that isn't likely unless the game start updating a lot slower.
+//Jason-this should be provide by the public property
+//abstractEntity, which abstractEnemy inherits, has a public property, which you are setting here. 
+//So there shouldn't be a need for this method.
+Time: 20 minutes
+Change: I would add a Vector2 parameter to the constructor to make setting the position in the constructor make more sense. 
+In this class it would be easier though more work would have to go into makig the enemy factor as the constructor now has an extra parameter.
+So it may be better to just not set the Position in the constructor as well. Either would work well and be relatively easy to implement.
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace TechSupportMario.Entity.Enemy
+{
+    public class Goomba : AbstractEnemy
+    {
+        private int lastFrameTime;
+        private int currentXFrame;
+        private int currentYFrame;
+        private Rectangle _sourceRectangle;
+
+        public Goomba(Texture2D texture)
+        {
+            lastFrameTime = 0;
+            currentXFrame = 0;
+            currentYFrame = 0;
+            Rows = 1;
+            Columns = 2;
+            SetSourceRectangle();
+
+            //Jason-Position should really be set to 0,0 and have another class tell it where to start or have it part of the constructor.
+
+            Position = new Vector2(30, 70);
+            Texture = texture;
+        }
+
+        private void SetSourceRectangle()
+        {
+            //don't need sourcerectangle property
+            _sourceRectangle = new Rectangle();
+            _sourceRectangle.Location = new Point((int)0, (int)0);
+
+            //Jason-shouldn't need the cast to ints, Point has an int constructor.
+
+            _sourceRectangle.Size = new Point((int)32, (int)32); //size of goomba in goomba sprite sheet
+        }
+        
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Rectangle destinationRectangle = new Rectangle(new Point((int)Position.X,(int)Position.Y - _sourceRectangle.Height), _sourceRectangle.Size);
+            spriteBatch.Draw(Texture, destinationRectangle, _sourceRectangle, Color.White);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            lastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
+            if(lastFrameTime >= Frame)
+            {
+                //Jason-Could always just set lastFrameTime to 0, the extra part is only a few milliseconds and really we don't want that as it could cause the sprite to update at different intervals
+                //than they would normally over time, though that isn't likely unless the game start updating a lot slower.
+
+                lastFrameTime -= Frame;
+                _sourceRectangle.X = currentXFrame * _sourceRectangle.Size.X;
+                if ((currentXFrame += 1) > Columns)
+                {
+                    currentXFrame = 0;
+                    Flip();
+                }
+            }
+        }
+
+        private void Flip()
+        {
+            if(currentYFrame == 0)
+            {
+                currentYFrame++;
+            } else
+            {
+                currentYFrame = 0;
+            }
+            _sourceRectangle.Y = currentYFrame * _sourceRectangle.Size.Y;
+        }
+
+        //Jason-this should be provide by the public property
+        //abstractEntity, which abstractEnemy inherits, has a public property, which you are setting here. So there shouldn't be a need for this method.
+        public override void SetPosition(Vector2 position)
+        {
+            Position = position;
+        }
+
+        public override void SetSourcePosition(Point p)
+        {
+            _sourceRectangle.Location = p;
+        }
+    }
+}

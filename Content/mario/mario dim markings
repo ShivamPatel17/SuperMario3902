@@ -1,0 +1,20 @@
+normal mario dim WxH in total is 42x75
+idle- 14x20
+walking 2 sprites- 14x20, 14X19
+crouch mario- 15x14
+jumping mario (up first)- 16x21, 16x20
+sitting/sliding mario- 15x19
+
+Super mario (larger) in total is 46x100
+idle- 15x28
+walking 2 sprites- 15x29, 16X27
+crouch mario- 16x15
+jumping mario (up first)- 16x31, 16x29
+sitting/sliding mario- 15x25
+
+Fire mario is 46x74
+idle- 15x28
+walking 2 sprites- 15x28, 15X28
+crouch mario- 16x15
+jumping mario (up first)- 16x31, 16x29
+sitting/sliding mario- 15x25

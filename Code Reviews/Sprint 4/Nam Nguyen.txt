@@ -1,0 +1,85 @@
+﻿Author: Nam Nguyen
+Date: 4/7/2020
+Sprint: 4
+Minutes: 5
+File name: AbstractGameState.cs and IGameState.cs
+Author of File: Shivam Patel
+Comment:
+- Two file provide the same things as an extension of IState.
+Proposing Change:
+- Delete IGameState.
+Code:
+Abstract Game State:
+using Microsoft.Xna.Framework;
+using TechSupportMario.CameraItems;
+
+namespace TechSupportMario.State.GameStates
+{
+    public abstract class AbstractGameState : IGameState
+    {
+        public Level Context { get; set; }
+        public AbstractGameState()
+        {
+
+        }
+        public virtual void End()
+        {
+            
+        }
+
+        public virtual void Enter()
+        {
+           
+        }
+
+        public virtual void Leave(IState nextState)
+        {
+            
+        }
+
+        public virtual void Restart()
+        {
+
+        }
+
+        public virtual void Pause()
+        {
+            
+        }
+
+        public virtual void Start()
+        {
+            
+        }
+
+        public virtual void Update(GameTime gameTime, Camera camera)
+        {
+
+        }
+
+        public virtual void Warp(int NextArea, int dir, Camera camera)
+        {
+            
+        }
+    }
+}
+IGameState:
+using Microsoft.Xna.Framework;
+using TechSupportMario.CameraItems;
+
+namespace TechSupportMario.State.GameStates
+{
+    public interface IGameState:IState
+    {
+        void Pause();
+        void Start();
+        void End();
+        void Warp(int NextArea, int dir, Camera camera);
+        void Update(GameTime gameTime, Camera camera);
+
+        void Restart();
+    }
+}
+
+
+

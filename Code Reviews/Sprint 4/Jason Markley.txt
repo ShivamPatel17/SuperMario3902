@@ -1,0 +1,145 @@
+﻿Author: Jason
+Date: 4/7
+Sprint: 4
+Name of File: Player.cs
+Author of file: Allen
+Comments:
+lot of magic numbers. Some, like one hundred, is used a lot. Changing it to use a constant, like base_points could make it easier to change later if we wanted to.
+Having two constants for a hundred may be weird but also having one for how many coins for a new life could be nice to make it easier to quickly find how many coins for a new life and how many points
+the player is earning normally. Can also use a multiplier for how much the bigger things are worth like 10 times so everything can change together easily as needed. Could combine colliding with an abstract
+enemy into a method and colliding with an item into a method.
+
+time: 10 minutes
+Change:
+Use constants for the pont values and coins to make it easier the base points and how much more the "special" items/enemies are worth.
+
+using TechSupportMario.Commands;
+using TechSupportMario.Entity.Block;
+using TechSupportMario.Entity.Enemy;
+using TechSupportMario.Entity.Items;
+using TechSupportMario.Entity.MarioEntity;
+using TechSupportMario.State.MarioStates.MarioPowerStates;
+
+namespace TechSupportMario
+{
+    public class Player
+    {
+        public int Lives { get; set; }
+        public int Score { get; set; }
+        public int Coins { get; set; }
+        public Mario PlayerMario { get; set; }
+        private readonly PlayerSave playerSave;
+        
+        public Player()
+        {
+            Coins = 0;
+            Score = 0;
+            Lives = 3;
+            playerSave = new PlayerSave();
+            SaveState();
+        }
+
+        public void HandleMarioCollision(object sender, MarioCollisionEventArgs eventArgs)
+        {
+            if(eventArgs.CollidedWith is AbstractEnemy)
+            {
+                if (eventArgs.TookDamage)
+                {
+                    if(PlayerMario?.PowerState is MarioPowerStateDead)
+                    {
+                        Lives -= 1;
+                        //if lives is 0, game over
+                    }
+                } 
+                else
+                {
+                    if (eventArgs.CollidedWith is Goomba)
+                    {
+                        Score += 100;
+                    }
+                    else if (eventArgs.CollidedWith is GreenKoopa)
+                    {
+                        Score += 100;
+                    }
+                }
+                
+            } else if(eventArgs.CollidedWith is IItem && eventArgs.CollidedWith.Collect == false)
+            {
+                if(eventArgs.CollidedWith is Coin)
+                {
+                    AddCoin();
+                }
+                if(eventArgs.CollidedWith is SuperMushroom || eventArgs.CollidedWith is FireFlower || eventArgs.CollidedWith is Star)
+                {
+                    Score += 1000;
+                }
+                if(eventArgs.CollidedWith is OneUpMushroom)
+                {
+                    Lives += 1;
+                }
+            } else if(eventArgs.CollidedWith is IBlock)
+            {
+                if(((AbstractBlock)eventArgs.CollidedWith).Items.Count > 0)
+                {
+                    ICommand item = ((AbstractBlock)eventArgs.CollidedWith)?.Items?.Peek();
+                    if (item is CoinItemCommand)
+                    {
+                        AddCoin();
+                    }
+                }
+                
+            }
+            Stage.level.HUD.GameScore.SetScore(Score);
+        }
+
+        public void Reset()
+        {
+            if (Lives == 0)
+            {
+                Lives = 3;
+                Coins = 0;
+                Score = 0;
+                playerSave.SavePlayer(this);
+            }
+            else
+            {
+                playerSave.LoadSave(this);
+            }
+            
+        }
+
+        public void SaveState()
+        {
+            playerSave.SavePlayer(this);
+        }
+
+        private void AddCoin()
+        {
+            Score += 200;
+            Coins += 1;
+            if (Coins % 100 == 0)
+            {
+                Coins = 0;
+                Lives += 1;
+            }
+        }
+
+        internal class PlayerSave
+        {
+            private int score;
+            private int coins;
+
+            public void SavePlayer(Player player)
+            {
+                score = player.Score;
+                coins = player.Coins;
+            }
+
+            public void LoadSave(Player player)
+            {
+                player.Score = score;
+                player.Coins = coins;
+            }
+        }
+    }
+}

@@ -1,0 +1,264 @@
+﻿Author: Nam Nguyen
+Date: 2/25/2020
+Sprint: 2
+Minutes: 10
+File name: Function BuildEntity in Stage.cs 
+Author of File: Shivam Patel
+Comment:
+- Really straightforward and easy to understand construction of level definition.
+- I see the for loop for the item just repeat several time. 
+- Same thing for some other setting position and AddSprite
+Proposing Change:
+- Probably just intialize before going to cases and assign during cases.
+- At the end of each we just do the step one time. 
+Code:
+ static void BuildEntity(String code, int XPos, int YPos)
+        {
+            if (code.Length > 0)
+            {
+                char key1 = code[0], key2 = 'a', key3 = 'a';
+                int key4 = 1;
+                if (code.Length > 1)
+                {
+                    key2 = code[1];
+                }
+                if (code.Length > 2)
+                {
+                    key3 = code[2];
+                }
+                if (code.Length > 3)
+                {
+                    key4 = (int)char.GetNumericValue(code[3]);
+                }
+
+
+                //see 'Level Key.txt' for the Key!!
+                switch (key1)
+                {
+                    //this is the case for blocks
+                    case 'B':
+                        //key2 is guaranteed to have a value
+                        switch (key2)
+                        {
+                            case 'B':
+                                IBlock bb = BlockFactory.Instance.BrickBlock();
+                                bb.Position = new Vector2(XPos, YPos);
+                                ICommand cmd;
+                                switch (key3)
+                                {
+                                    case 'C':
+                                        cmd = new CoinItemCommand(bb);
+                                        for (int i = 0; i < key4; i++)
+                                            bb.AddCommand(cmd);
+                                        
+                                        break;
+
+                                    case 'M':
+                                        cmd = new SuperMushroomItemCommand(bb);
+                                        for (int i = 0; i < key4; i++)
+                                            bb.AddCommand(cmd);
+                                        
+                                        break;
+                                    case 'F':
+                                        cmd = new FireFlowerItemCommand(bb);
+                                        for (int i = 0; i < key4; i++)
+                                            bb.AddCommand(cmd);
+                                        break;
+                                    case 'O':
+                                        cmd = new OneUpMushroomItemCommand(bb);
+                                        for (int i = 0; i < key4; i++)
+                                            bb.AddCommand(cmd);
+                                        break;
+                                  
+                                    case 'S':
+                                        cmd = new StarItemCommand(bb);
+                                        for (int i = 0; i < key4; i++)
+                                            bb.AddCommand(cmd);
+                                        break;
+                                    default:
+                                        break;
+                                    
+                                }
+                                AddSprite(bb);
+                                break;
+                            case 'F':
+                                IBlock f = BlockFactory.Instance.FloorBlock();
+                                f.Position = new Vector2(XPos, YPos);
+                                AddSprite(f);
+                                break;
+                            case 'P':
+                                IBlock p = BlockFactory.Instance.Pipe();
+                                p.Position = new Vector2(XPos, YPos);
+                                AddSprite(p);
+                                break;
+                            case 'Y':
+                                IBlock y = BlockFactory.Instance.PyramidBlock();
+                                y.Position = new Vector2(XPos, YPos);
+                                AddSprite(y);
+                                break;
+                            case 'Q':
+                                QuestionBlock qb = BlockFactory.Instance.QuestionBlockQ();
+                                qb.Position = new Vector2(XPos, YPos);
+                                ICommand qcmd;
+                                //if key2 == Q, then there valid key3
+                                switch (key3)
+                                {
+                                    case 'C':
+                                        qcmd = new CoinItemCommand(qb);
+                                        for (int i = 0; i < key4; i++)
+                                            qb.AddCommand(qcmd);
+                                        AddSprite(qb);
+                                        break;
+                                    case 'M':
+                                        qcmd = new SuperMushroomItemCommand(qb);
+                                        for (int i = 0; i < key4; i++)
+                                            qb.AddCommand(qcmd);
+                                        AddSprite(qb);
+                                        break;
+                                    case 'F':
+                                        qcmd = new FireFlowerItemCommand(qb);
+                                        for (int i = 0; i < key4; i++)
+                                            qb.AddCommand(qcmd);
+
+                                        AddSprite(qb);
+                                        break;
+                                    case 'S':
+                                        qcmd = new StarItemCommand(qb);
+                                        for (int i = 0; i < key4; i++)
+                                            qb.AddCommand(qcmd);
+
+                                        AddSprite(qb);
+                                        break;
+                                    case 'O':
+                                        qcmd = new OneUpMushroomItemCommand(qb);
+                                        for (int i = 0; i < key4; i++)
+                                            qb.AddCommand(qcmd);
+
+                                        AddSprite(qb);
+                                        break;
+
+                                    case 'H':
+                                        IBlock qh = BlockFactory.Instance.HiddenQuestionBlock();
+                                        qh.Position = new Vector2(XPos, YPos);
+                                        AddSprite(qh);
+                                        break;
+                                    default:
+                                        IBlock q = BlockFactory.Instance.QuestionBlock();
+                                        q.Position = new Vector2(XPos, YPos);
+                                        AddSprite(q);
+                                        break;
+                                }
+                                break;
+                            case 'H':
+                                IBlock h = BlockFactory.Instance.HiddenBrickBlock();
+                                h.Position = new Vector2(XPos, YPos);
+                                AddSprite(h);
+                                break;
+
+                        }
+                        break;
+
+                    //this is the case for Enemies
+                    case 'E':
+                        //guaranteed to have a valid key2 to specify the type of enemy
+                        switch (key2)
+                        {
+                            case 'G':
+                                IEntity g = EnemyFactory.Instance.Goomba();
+                                g.Position = new Vector2(XPos, YPos);
+                                AddSprite(g);
+                                break;
+                            case 'K':
+                                IEntity k = EnemyFactory.Instance.GreenKoopa();
+                                k.Position = new Vector2(XPos, YPos);
+                                AddSprite(k);
+                                break;
+                            case 'R':
+                                IEntity r = EnemyFactory.Instance.RedKoopa();
+                                r.Position = new Vector2(XPos, YPos);
+                                AddSprite(r);
+                                break;
+                        }
+                        break;
+
+                    //this is the case for Items
+                    case 'I':
+                        //guaranteed to have a valid key2 to specify the type of item
+                        switch (key2)
+                        {
+                            case 'C':
+                                IEntity c = ItemFactory.Instance.Coin();
+                                c.Position = new Vector2(XPos, YPos);
+                                AddSprite(c);
+                                break;
+                            case 'F':
+                                IEntity f = ItemFactory.Instance.FireMushroom();
+                                f.Position = new Vector2(XPos, YPos);
+                                AddSprite(f);
+                                break;
+                            case 'O':
+                                IEntity o = ItemFactory.Instance.OneUpMushroom();
+                                o.Position = new Vector2(XPos, YPos);
+                                AddSprite(o);
+                                break;
+                            case 'S':
+                                IEntity st = ItemFactory.Instance.Star();
+                                st.Position = new Vector2(XPos, YPos);
+                                AddSprite(st);
+                                break;
+                            case 'M':
+                                IEntity s = ItemFactory.Instance.SuperMushroom();
+                                s.Position = new Vector2(XPos, YPos);
+                                AddSprite(s);
+                                break;
+                        }
+                        break;
+
+                    //this is the base for background images
+                    case 'G':
+                        switch (key2)
+                        {
+                            case 'C':
+                                ISprite c = BackgroundFactory.Instance.Cloud();
+                                c.Position = new Vector2(XPos, YPos);
+                                AddSprite(c);
+                                break;
+                            case 'B':
+                                ISprite b = BackgroundFactory.Instance.BigCloud();
+                                b.Position = new Vector2(XPos, YPos);
+                                AddSprite(b);
+                                break;
+                            case 'U':
+                                ISprite u = BackgroundFactory.Instance.Bush();
+                                u.Position = new Vector2(XPos, YPos);
+                                AddSprite(u);
+                                break;
+                            case 'M':
+                                ISprite m = BackgroundFactory.Instance.Mountain();
+                                m.Position = new Vector2(XPos, YPos);
+                                AddSprite(m);
+                                break;
+                            case '1':
+                                ISprite r = BackgroundFactory.Instance.MountainRange();
+                                r.Position = new Vector2(XPos, YPos);
+                                AddSprite(r);
+                                break;
+                            case '2':
+                                ISprite r2 = BackgroundFactory.Instance.MountainRange();
+                                r2.Position = new Vector2(XPos, YPos + 4);
+                                AddSprite(r2);
+                                break;
+                        }
+                        break;
+                    //this is the case for mario
+                    case 'M':
+                        mario.Position = new Vector2(XPos, YPos);
+                        mario.SourceRectangle = new Rectangle(new Point(0, 0), new Point(28, 40));
+                        AddSprite(mario);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }

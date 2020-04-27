@@ -1,0 +1,439 @@
+﻿Author: Allen Wang
+Date: 2/25/2020
+Sprint: 2
+Name of file: CollisionDetection.cs
+Author of file: Jason Markley (other people also wrote some of the methods)
+Comments:
+//This is a pretty large class, I wonder if some of the methods could be grouped up and split into subclasses
+//Large amounts of branching, could put code in branches to private methods, would reduce clutter in branches
+//In CheckAndFixMarioOutOfBounds, (written by me), might be better to move Rectangles outside the method, since they don't change but are created each time the method
+//is called
+//
+//only having integers as collision directions makes its return values seem a bit too abstract
+Time: 15 min
+Changes: I would create the enum for collision direction integers, move the Rectangles for bounds outside of method, and for methods with large amounts of
+branching, I would create private methods that contain code for those branches.
+
+namespace TechSupportMario.Collisions
+{
+    public class CollisionDetection
+    {
+        private Color colColor = Color.Green;
+
+        public CollisionDetection()
+        {
+
+        }
+
+        /// <summary>
+        /// This method will check every entity in the list given and then 'fix' them if needed (so only collisions with items of type IBlock)
+        /// If the collision is with a entity of type IMario then it will call the methods on mario and the entity as needed.  Should only use 
+        /// moving entities, like mario, enemies, and items otherwise  using the other method is going run in about the same amount of time.
+        /// </summary>
+        /// <param name="checkEntities">the list of entities to check collisions for.</param>
+        public void CollisionsCheckAndFix(ISet<IEntity> checkEntities, QuadTree CollisionTree)
+        {
+            foreach (IEntity entity in checkEntities)//loop through the entities that need to be checked
+            {
+                bool cont = true;
+                while (cont)//continue to check till there are no more collisions to resolve
+                {
+                    ISet<IEntity> possibleCollisions = CollisionTree.Retrieve(entity);//get nearest neighbor
+                    if (possibleCollisions.Count > 0)//check if any exist
+                    {
+                        ISet<IEntity> firstCollider = new HashSet<IEntity>();
+                        //time it happened, from 0 to 1 as a decimal representing a percentage
+                        float time = 1;
+                        foreach (IEntity possible in possibleCollisions)//loop through the possibilities
+                        {
+                            if (entity.CollisionBox.Intersects(possible.CollisionBox))//see if they intersect
+                            {
+                                //fix it so that the hidden block isn't even tried if it isn't from the bottom
+                                //first check if it is a block, if it is a block check if it is in the hidden state
+                                //if the block is in the hidden state then is the collision from the bottom
+                                if (!(possible is IBlock && ((IBlock)possible).BlockState is BlockStateHidden && !HiddenBlockValid(entity, (IBlock)possible)))
+                                {
+                                    if (firstCollider.Count == 0)//first entity to collide with the checking entity
+                                    {
+                                        firstCollider.Add(possible);
+                                        time = FindTime(entity, possible);
+                                    }
+                                    else//see if it happened earlier in the update or not
+                                    {
+                                        float temp = FindTime(entity, possible);
+                                        if (time > temp)
+                                        {
+                                            firstCollider.Clear();
+                                            firstCollider.Add(possible);
+                                            time = temp;
+                                        }
+                                        else if (time == temp)
+                                        {
+                                            firstCollider.Add(possible);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (firstCollider.Count > 0)//see if any collision needs to be resolved
+                        {
+                            bool allEnemiesItems = true;
+                            foreach (IEntity collision in firstCollider)//resolve the collisions
+                            {
+                                if (!(collision is AbstractEnemy) && !(collision is IItem))
+                                {
+                                    allEnemiesItems = false;//enemies and items won't move mario so if they are all that is colliding there is no need to loop through this again with the entity
+                                }
+                                IEntity first = entity;
+                                IEntity second = collision;
+                                SetTheEntitiesInOrder(ref first, ref second);//method to simplify the checking later (mario first, if no mario moving entity first then blocks)
+                                FixCollisions(first, second, time);//fix it and call the needed methods
+                                //update the tree
+                                CollisionTree.Remove(entity);
+                                CollisionTree.Remove(collision);
+                                CollisionTree.Insert(entity);
+                                CollisionTree.Insert(collision);
+                            }
+                            //checks to see if the while loop should continue or exit
+                            if (allEnemiesItems)
+                            {
+                                cont = false;
+                            }
+                        }
+                        else
+                        {
+                            cont = false;
+                        }
+                    }
+                    else
+                    {
+                        cont = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method will check if mario is out side of the play area. If mario is outside the play area, defined
+        /// by the quadtree bounds, then it will put mario back in the quad tree bounds changing his position by as 
+        /// small amount as possible.
+        /// </summary>
+        /// <param name="mario"></param>
+        public static void CheckAndFixMarioOutOfBounds(ISprite mario, Rectangle bounds)
+        {
+            Rectangle xAxisTop = new Rectangle(bounds.X, bounds.Y, bounds.Width, 0);
+            Rectangle xAxisBottom = new Rectangle(bounds.X, bounds.Y + bounds.Height, bounds.Width, 0);
+            Rectangle yAxisLeft = new Rectangle(bounds.X, bounds.Y, 0, bounds.Height);
+            Rectangle yAxisRight = new Rectangle(bounds.X + bounds.Width, bounds.Y, 0, bounds.Height);
+            Vector2 position = mario.Position;
+            //may need to check each side seperately in case he goes out a corn and is now both above/below and the left/right of the screen
+            if (mario.CollisionBox.Intersects(xAxisTop))
+            {
+                position.Y += xAxisTop.Y - mario.CollisionBox.Y;
+            }
+            if (mario.CollisionBox.Intersects(xAxisBottom))
+            {
+                position.Y += xAxisBottom.Y - (mario.CollisionBox.Y + mario.CollisionBox.Height);
+            }
+            if (mario.CollisionBox.Intersects(yAxisLeft))
+            {
+                position.X += yAxisLeft.X - mario.CollisionBox.X;
+            }
+            if (mario.CollisionBox.Intersects(yAxisRight))
+            {
+                position.X += yAxisRight.X - (mario.CollisionBox.X + mario.CollisionBox.Width);
+            }
+            mario.Position = position;
+        }
+
+        /// <summary>
+        /// the goal of this method is to make the first entity mario or the entity with velocity.
+        /// If mario is one of the two, first will become mario otherwise first will have a none zero velocity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        private static void SetTheEntitiesInOrder(ref IEntity first, ref IEntity second)
+        {
+            if (first is Mario)
+            {
+                return;
+            }
+            else if (second is Mario)
+            {
+                IEntity temp = first;
+                first = second;
+                second = temp;
+                return;
+            }
+            else if (first.Velocity.Length() == 0)
+            {
+                IEntity temp = first;
+                first = second;
+                second = temp;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// to fix when mario grows, can be jump or changing to super/fire state or even death, 
+        /// though death state won't need it after sprint 2 (he will become uncollidable and be reset)
+        /// </summary>
+        /// <param name="mario"></param>
+        /// <param name="changeInY"></param>
+        public static void FixCollisionFromStateChange(IEntity mario, int changeInY)
+        {
+            ISet<IEntity> entities = Stage.GameQuadTree.Retrieve(mario);
+            foreach (IEntity block in entities)//only care about blocks so just naming it nice
+            {
+                if (block is IBlock)//check if it is a block
+                {
+                    Rectangle intersection = Rectangle.Intersect(mario.CollisionBox, block.CollisionBox);//find the intersection
+                    if (!intersection.IsEmpty)//if they have some correction space to fix or not
+                    {
+                        if (!(((AbstractBlock)block).BlockState is BlockStateHidden))//check if there needs to be a fix
+                        {
+                            //so there is an intersection
+                            Vector2 position = mario.Position;
+                            if (changeInY >= intersection.Height)//check y over lap and which direction to move mario
+                            {
+                                    position.Y += intersection.Height;
+                            }
+                            else
+                            {
+                                position.X -= intersection.Width;
+                            }
+                            mario.Position = position;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// this method will set the positions of both items to a position so their Collision boxes are no longer intersecting yet still along their path.
+        /// </summary>
+        /// <param name="entityOne">this should be the entity with a velocity</param>
+        /// <param name="entityTwo">if a block is in the collision it should be this one</param>
+        private void FixCollisions(IEntity entityOne, IEntity entityTwo, float time)
+        {
+            //temp for animation stuff, won't need it after sprint 2
+            ((AbstractEntity)entityOne).DrawColor = colColor;
+            ((AbstractEntity)entityTwo).DrawColor = colColor;
+            entityOne.NeedsUpdating = true;
+            entityTwo.NeedsUpdating = true;
+            //end temp stuff
+
+            int dir = CollisionDirection(entityOne, entityTwo);//find the direction before the entities are no longer colliding
+            if (entityTwo is IBlock)//only blocks need to fix the position of mario
+            {
+                Vector2 newPosition = entityOne.Position;
+
+                if (0f <= time && 1f >= time)
+                {//if outside this time something weird happened somewhere else and needs to be fixed there or it was part of a collision that happened at the same time as another that
+                    //moved one or both the entities to no longer be touching, so no movement needed
+                    newPosition.X = (int)newPosition.X - entityOne.Velocity.X * (1 - time);
+                    newPosition.Y = (int)newPosition.Y - entityOne.Velocity.Y * (1 - time);
+                    entityOne.Position = newPosition;
+                }
+                CallMethods(entityOne, entityTwo, dir);//methods should always be called
+            }
+            else//items or enemy collisions
+            {
+                //here there is no need to fix the positions just check if any methods need to be called so the right actions happen
+                CallMethods(entityOne, entityTwo, dir);
+            }
+        }
+
+        /// <summary>
+        /// The will return an integer from 0 to 1 unless the collision couldn't happen within one frame.
+        /// If only one entity is moving then it should be entityOne in the call.
+        /// </summary>
+        /// <param name="entityOne"></param>
+        /// <param name="entityTwo"></param>
+        /// <returns>float between 0 and 1 inclusive if the collision happened in the frame</returns>
+        private static float FindTime(IEntity entityOne, IEntity entityTwo)
+        {
+            Rectangle overlap = Rectangle.Intersect(entityOne.CollisionBox, entityTwo.CollisionBox);
+            Vector2 v1 = entityOne.Velocity;
+            Vector2 v2 = entityTwo.Velocity;
+            Vector2 combinedVelocity = v1;
+            combinedVelocity.X += v2.X;
+            combinedVelocity.Y += v2.Y;
+            float t1 = 1 - Math.Abs(overlap.Width / combinedVelocity.X);
+            if (t1 > 1 || t1 < 0)
+            {
+                return 1 - Math.Abs(overlap.Height / combinedVelocity.Y);
+            }
+            else
+            {
+                return t1;
+            }
+        }
+
+        /// <summary>
+        /// this method will return an int 0-5, 0 is down, 1 is up, 2 is left, 3 is right, 4 the collision happened at the same time as another collision, yet it happened from the bott.
+        /// 5 is it happened at the same time as another processed collision and from a direction other that the bottom. That is the direction that the collision came from.
+        /// </summary>
+        /// <param name="entityOne">this should be the moving entity in the pair, otherwise this method won't work correctly.</param>
+        /// <returns> 0-5, 0 is down, 1 is up, 2 is left, 3 is right, 4 the collision happened at the same time as another collision, yet it happened from the bott That is the direction that the collision came from. </returns>
+        private static int CollisionDirection(IEntity entityOne, IEntity entityTwo)
+        {
+            if (!Rectangle.Intersect(entityOne.CollisionBox, entityTwo.CollisionBox).IsEmpty)
+            {
+                if (entityOne.Velocity.X == 0)
+                {
+                    //so up or down
+                    if (entityOne.Velocity.Y < 0)
+                    {
+                        return 0;
+                    }
+                    else if (entityOne.Velocity.Y > 0)
+                    {
+                        return 1;
+                    }
+                }
+                else//for now assuming only one is moving
+                {
+                    //so left or right
+                    if (entityOne.Velocity.X > 0)
+                    {
+                        return 3;
+                    }
+                    else if (entityOne.Velocity.X < 0)
+                    {
+                        return 2;
+                    }
+                }
+            }
+            if (entityOne.Position.Y - entityOne.CollisionBox.Height > entityTwo.Position.Y)
+            {
+                return 4;
+            }
+            else
+            {
+                return 5;
+            }
+        }
+
+        /// <summary>
+        /// this method will call any methods on the entities as needed
+        /// </summary>
+        /// <param name="entityOne">this should be the moving entity unless both are moving. Should also be mario if mario is part of the collision</param>
+        /// <param name="entityTwo">if a block is part of the collision it should be this one</param>
+        private static void CallMethods(IEntity entityOne, IEntity entityTwo, int dir)
+        {
+            //TODO add the checks to the see if any method calls are needed
+            if (entityOne is Mario)
+            {
+                if (entityTwo is IBlock)
+                {
+
+                    switch (dir)
+                    {
+                        case 0:
+                            ((IMario)entityOne).DownAction();
+                            ((IBlock)entityTwo).CollisionTransition((IMario)entityOne);
+                            break;
+                        case 1:
+                            ((IMario)entityOne).UpAction();
+                            break;
+                        case 2:
+                            ((IMario)entityOne).RightAction();
+                            break;
+                        case 3:
+                            ((IMario)entityOne).LeftAction();
+                            break;
+                        case 4:
+                            ((IBlock)entityTwo).CollisionTransition((IMario)entityOne);
+                            break;
+                    }
+
+                }
+                else //entityTwo is an item or enemy
+                {
+                    if (entityTwo is AbstractEnemy)
+                    {
+                        float check = FindTime(entityOne, entityTwo);
+                        if (dir == 1 && check <= 1.0f && check >= 0.0f)
+                        {
+                            if (entityOne.Position.Y < entityTwo.Position.Y)
+                                ((AbstractEnemy)entityTwo).TakeDamage();
+                        }
+                        else
+                        {
+                            ((IMario)entityOne).TakeDamage();
+                        }
+                    }
+                    else //entityTwo is an item
+                    {
+                        if(entityTwo is AbstractItem)
+                        {
+                            if(entityTwo is Coin)
+                            {
+                                //mario gets a coin
+                                if (((AbstractItem)entityTwo).FromBlock)
+                                {
+                                    entityTwo.Collect = true;
+                                }
+                            }
+                            if(entityTwo is Star)
+                            {
+                                
+                                ((IMario)entityOne).StarAction();
+                                if (((AbstractItem)entityTwo).FromBlock)
+                                {
+                                    entityTwo.Collect = true;
+                                }
+                            }
+                            if(entityTwo is FireMushroom)
+                            {
+                                ((IMario)entityOne).ActionFireFlower();
+                                if (((AbstractItem)entityTwo).FromBlock)
+                                {
+                                    entityTwo.Collect = true;
+                                }
+                            }
+                            if(entityTwo is SuperMushroom)
+                            {
+                                ((IMario)entityOne).SuperMushroomAction(false);
+                                if (((AbstractItem)entityTwo).FromBlock)
+                                {
+                                    entityTwo.Collect = true;
+                                }
+                            }
+                            if(entityTwo is OneUpMushroom)
+                            {
+                                if (((AbstractItem)entityTwo).FromBlock)
+                                {
+                                    entityTwo.Collect = true;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //entityOne is an enemy, entityTwo may be an enemy or a block, call change direction on entity one and check if you should on entity two
+            }
+        }
+
+        private static bool HiddenBlockValid(IEntity mario, IBlock block)
+        {
+            bool possible = false;
+            if (CollisionDirection(mario, block) == 0)
+            {
+                float time = FindTime(mario, block);
+                if (time >= 0 && time <= 1)
+                {
+                    if (mario.Position.Y > block.Position.Y)
+                    {
+                        possible = true;
+                    }
+                }
+            }
+            return possible;
+        }
+    }
+}

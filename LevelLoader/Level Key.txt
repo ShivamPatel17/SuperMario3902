@@ -1,0 +1,110 @@
+﻿This is the Key for updating the level
+
+The relative position of the values in the 'level1.csv' will reflect accordingly in the game
+
+
+
+
+Mario
+    M: Normal Mario
+
+Blocks
+    BA: Button block
+    BB: Brick Block
+    BC#_TYPE:
+        # is the button that will make it disappear
+        TYPE can be
+            b for brickblock look
+            F for floor block or
+                fc for castle
+                fU_ for underground
+            R_ for rock
+    BF: Floor Block
+    BFC: Castle Floor Block
+    BFUN: underground floor block
+    BFUR: underground right side block
+    BFUL: underground left side block
+    BFUT: underground top side block
+    BFUZ: underground empty block
+    BH: Hidden Brick
+    BI: warp pipe facing up containing some item or enemy
+    BK: keyhole block
+    BP: Pipe Block
+        sub types
+        B bottom block
+        M middle block
+    BQ: Question Block
+    BQH: Hidden Question Block
+    BQC: Question Block with Coin
+    BQM: Question Block with Mushroom
+    BQF: Question Block with Fire Flower
+    BQO: Question Block with One Up
+    BQU: Used block
+    BR: Rock part
+        need to add at least one of the below-
+        M for the middle
+        L for the left side
+        R for the right side
+        B for the bottom side
+        T for the top side
+        LT for the top left corner
+        RT for the top right corner
+        LB for the bottom left corner
+        RB for the bottom right corner
+    BT: Toggle Block
+        H will make it hidden add any single character to make hit collidable
+        0-9 will pick which button it interacts with. Buttons will be made top to bottom left to right (the order the world is made in).
+    BWU: warp pipe facing up
+    BWL: warp pipe facing left
+    BWR: warp pipe facing right
+    BY: Pyramid Block
+
+    
+    
+	
+	# for the following key, each item can appear multiple times
+	# if the key is followed by a single digit; default is 1
+	#
+	# for example: BBC4 will create a Brick block with 4 coins
+	# example 2: BBM2 will create a Brick block with 2 mushrooms
+	# example 3: BBO will create a brick block with 1 one-up mushroom
+	BBC: Brick Block with Coin
+    BBM: Brick Block with Mushroom
+    BBF: Brick Block with Fire Flower
+    BBO: Brick Block with One Up
+    #if a block has a Z then it isn't collidable
+
+    # for BI it can also have enemies in it along with items
+    BIC: will shoot out coins.
+
+Enemies
+    EG: Goomba
+    EK: Green Koopa
+    ER: Red Koopa
+
+Items
+    IC: Coin
+    IF: Fire Flower
+    IO: One Up Mushroom
+    IS: Star power
+    IM: Mushroom
+    IK: Key
+
+Exit
+    Z then a integer for what level part has mario set to that position
+Zones:
+    CC: Checkpoint
+    CF: ending flag
+    CL: loading zone
+    CA: Castle
+    CS: small door
+    CL: locked door
+
+Background
+    GC: Cloud
+    GB: Big Cloud
+    GU: Bush
+    GM: Mountain
+    G1: Mountain Range 1
+    G2: Mountain Range 2
+

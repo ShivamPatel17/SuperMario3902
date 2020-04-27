@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/background_window.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/bush.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/castle_background.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/Cloud.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/Cloud_Big.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/Game Boy Advance - Super Mario Advance 2 Super Mario World - Backgrounds.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/ghosthouse.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/ghosthouseopen.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/ghosthouseopenwide.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/mount_lightgreen_front.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/mountain_range.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/pillar_background.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/spookyfog.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/undergroundbackground1.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/undergroundbackground2.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Background/undergroundbackground3.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/basic_floor_block.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/block_keyhole.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/bottom_underground.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/brown_brick.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/button.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/castle_floor.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/key.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/orignal_brown_brick.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/pipe.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/Pipe_Bottom.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/Pipe_middle.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/pipe_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/Pipe_Top.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/Pipe_Top_Left.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/Pipe_Top_Right.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/pyramid_block.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/question_block.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/rockparts.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/toggle_block.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/underground_floor.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/underground_floor_left.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/underground_floor_right.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/underground_floor_top.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/used_block.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/used_block_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/blocks/used_key.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/CollisionZones/Castle.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/CollisionZones/checkpoint.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/CollisionZones/flag.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/CollisionZones/reddoor.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/CollisionZones/smalldoor.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Colors/Blue.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Colors/Green.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Colors/Red.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Colors/White.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Colors/Yellow.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/black.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle1.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle10.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle11.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle2.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle3.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle4.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle5.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle6.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle7.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle8.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/EndingCircle/circle9.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/boo.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/boss.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/bulletbill.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/cannon.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/explosion.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/fireball.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/goomba_sprite.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/goomba_sprite_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/green_koopa.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/green_koopa_sprites_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/green_shell.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/green_shell_sprite_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/PiranhaPlant.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/red_koopa.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/red_koopa_sprites_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/red_shell.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/enemies/red_shell_sprite_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/Blocks_Enemies.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/brick and question block.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/enemies.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/enemies_sprites.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/enemies_together.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/mario.gif</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/Mario_Full.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/misc2.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/misc-4.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/SNES_SMW_enemies.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/full sprite sheets/title_parts_unfinished.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/arrow.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/base_hud_texture.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/gameoverscreen.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/key_hud.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/pause_menu.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/winscreen.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/HUD/winselectionscreen.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/coin.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/coin_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/fire_flower.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/fire_flower_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/green_mushroom.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/green_mushroom_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/red_mushroom.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/red_mushroom_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/star.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/items/star_small.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Letters_Numbers/white_numbers_letters.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/Letters_Numbers/yellow_numbers_letters.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/mario/fireball.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/mario/mario_sprites.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/mario/super2.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/mario/super3.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/mario/super4.png</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/103-music 03.mp3</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/camera-change.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/coin.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/level-win.ogg</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/normal_underworld_song.mp3</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/player-died.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/player-jump.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/shell-hit.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_1-up.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_breakblock.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_bump.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_coin.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_fireball.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_gameover.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_jump-small.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_jump-super.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_mariodie.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_pipe.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_powerup.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_powerup_appears.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/smb_warning.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/Effect/warp.wav</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/ghost_house.mp3</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/normal_overworld_song.mp3</File>
+    <File>C:/Users/patel/source/repos/TechSupport/TechSupportMario/Content/sound/normal_underworld_song.mp3</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

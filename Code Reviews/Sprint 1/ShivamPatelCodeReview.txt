@@ -1,0 +1,143 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using TechSupportMario.Entity.Block;
+using TechSupportMario.Entity.MarioEntity;
+using TechSupportMario.State.BlockState;
+
+/* **
+ * Author: Shivam Patel
+ * Date: 2/10/2020
+ * Sprint: 1
+ * file name: QuestionBlock.cs
+ * Author of questionblock.cs: Nam
+ * Comments: see below
+ * Minutes: 15 
+ * change: Could be using a better data structure. Use Queue instead of Stack
+ */
+namespace TechSupportMario
+{
+    class QuestionBlock : AbstractBlock
+    {
+        //width and height should be in the sourceRectangles.
+        private int width, height;
+        //don't need stacks, just one sourceRectangle
+        /*
+         * Stacks don't need to be used for the question block animated.
+         * Since the question is moving across the block in one direction and the 
+         * sprite sheet is created so that the rectangles can be sequential, there is
+         * no need for stacks
+         * 
+         * instead, you could use a queue!
+         * 
+         * private Queue<Rectangle> sourceRectangles;
+         */
+        private Stack<Rectangle> sourceRectangles1;
+        private Stack<Rectangle> sourceRectangles2;
+        private Rectangle usedSprite;
+        private double time = 0;
+        private double frameRate = 80;
+
+        public QuestionBlock(Texture2D texture)
+        {
+            Texture = texture;
+            width = texture.Width;
+            height = texture.Height;
+            Rows = 1;
+            Columns = 5;
+            createRectangles();
+
+            /* looks good, but perhaps a comment to explain the logic here would be appropriate
+             * 
+             * i.e: the 5th image in the question block sprite sheet is the used block
+             * since that image does not show until the state transitions to used, I'm creating 
+             * a usedSprite upon initialization to display once the question block is hit
+             */
+            usedSprite = new Rectangle(4 * (width / Columns), 0, width / Columns, height / Rows);
+
+            BlockState = new QuestionBlockStateNormal(this);
+            BlockState.Enter();
+        }
+        private void createRectangles()
+        {
+            /*  like mentioned above, the two stacks are not necessary since there is not 
+             *  "going back and forth" in the sprite sheet. Thus a queue would suffice
+             *  
+             *  initialize the queue here
+             */
+            sourceRectangles1 = new Stack<Rectangle>();
+            sourceRectangles2 = new Stack<Rectangle>();
+            for (int i = 0; i < Columns - 1; i++) // We don't want the last frame
+            {
+                Rectangle temp = new Rectangle(i * (width / Columns), 0, width / Columns, height / Rows);
+                /* add to queue via: 
+                 * 
+                 * sourceRectangles.enqueue(temp)
+                 * 
+                 */
+                sourceRectangles1.Push(temp);
+            }
+            /* add a comment for why changeSource is here
+             * i.e: this method is called so the question block initializes 
+             * the source rectangle via this method 
+             */
+            changeSource();
+        }
+
+        private void changeSource()
+        {
+            /* so here, the logic is pretty similar in that you check the rectangle 
+             * in your sourcerectangle data structure and then update SourceRectangle
+             * 
+             however, rather than the two stack, just set the source rectangle with a 
+             sourceRectangles.peek()
+             
+             but since you want to preserve that rectangle, also add a line that does:
+             sourceRectangle.queue(sourceRectangle.dequeu())
+
+             that way the rectangle at the front of this sequence goes to the back
+             */
+
+            SourceRectangle = sourceRectangles1.Peek();
+            sourceRectangles2.Push(sourceRectangles1.Pop());
+            if (sourceRectangles1.Count == 0)
+            {
+                sourceRectangles1 = sourceRectangles2;
+                sourceRectangles2 = new Stack<Rectangle>();
+            }
+        }
+
+        public override void CollisionTransition(IMario mario)
+        {
+            BlockState.Collision(mario);
+        }
+
+        /* looks good */
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            /*
+            if (time < 2000)
+                spriteBatch.Draw(Texture, Position,SourceRectangle, Color.White);
+            else
+                spriteBatch.Draw(Texture, Position, used, Color.White);
+            */
+            if (!(BlockState is BlockStateUsed))
+                spriteBatch.Draw(Texture, Position, SourceRectangle, Color.White);
+            else
+                spriteBatch.Draw(Texture, Position, usedSprite, Color.White);
+
+
+        }
+        /* looks good */
+        public override void Update(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds - time > frameRate)
+            {
+                changeSource();
+                time = gameTime.TotalGameTime.TotalMilliseconds;
+            }
+            BlockState.Update(gameTime);
+        }
+    }
+}
+
